@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="control">
+  <a href="{{ url_for('thunderstorm') }}" class="btn btn-primary" role="button">Thunderstorm</a>
+  <a href="{{ url_for('sunny') }}" class="btn btn-primary" role="button">Sunny</a>
+  <a href="{{ url_for('demo') }}" class="btn btn-primary" role="button">Demo</a>
+  <a href="{{ url_for('stop') }}" class="btn btn-danger" role="button">Stop</a>
+</div>
+{% endblock %}
