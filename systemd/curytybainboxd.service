@@ -3,7 +3,7 @@ Description=curytybainboxd
 After=network.target
 
 [Service]
-EnvironmentFile=/etc/env.d/curytybainbox
+EnvironmentFile=/etc/curytybainbox/environment
 Restart=always
 ExecStart=/usr/bin/curytybainboxd
 

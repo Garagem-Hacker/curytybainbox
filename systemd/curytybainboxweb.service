@@ -4,7 +4,7 @@ Requires=curytybainboxd.service
 After=curytybainboxd.service
 
 [Service]
-EnvironmentFile=/etc/env.d/curytybainbox
+EnvironmentFile=/etc/curytybainbox/environment
 Restart=always
 ExecStart=/usr/bin/curytybainboxweb
 
