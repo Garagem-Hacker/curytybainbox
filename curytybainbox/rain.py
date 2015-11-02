@@ -18,11 +18,11 @@ class RainProcess(Process):
         self.pump.dir(mraa.DIR_OUT)
 
     def _rain_on(self):
-        self.logger.debug('LED on')
+        self.logger.debug('Rain on')
         self.pump.write(1)
 
     def _rain_off(self):
-        self.logger.debug('LED off')
+        self.logger.debug('Rain off')
         if self.pump:
             self.pump.write(0)
 
