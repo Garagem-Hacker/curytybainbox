@@ -55,6 +55,20 @@ def rain():
     return redirect(url_for('index'))
 
 
+@app.route('/mist')
+def mist():
+    flash('Starting a mist weather', 'bg-info')
+    send_command('mist')
+    return redirect(url_for('index'))
+
+
+@app.route('/wind')
+def wind():
+    flash('Starting a wind weather', 'bg-info')
+    send_command('wind')
+    return redirect(url_for('index'))
+
+
 @app.route('/demo')
 def demo():
     flash('Starting a demo weather', 'bg-info')

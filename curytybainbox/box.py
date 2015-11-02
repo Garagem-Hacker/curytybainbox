@@ -7,6 +7,9 @@ from multiprocessing import Process, Event
 
 from .led import RGBLEDProcess
 from .weather import WeatherProcess
+from .rain import RainProcess
+from .mist import MistProcess
+from .wind import WindProcess
 
 
 class BoxProcess(Process):
@@ -19,6 +22,9 @@ class BoxProcess(Process):
         self.unix_path = unix_path
         self.thunderstorm = None
         self.sunny = None
+        self.rain = None
+        self.mist = None
+        self.wind = None
         self.demo = None
         self.weather = None
 
@@ -30,6 +36,18 @@ class BoxProcess(Process):
     def _sunny(self):
         self.logger.debug('Creating a sunny weather')
         return RGBLEDProcess(red=200, green=200, blue=255, strobe=False, sleep=1)
+
+    def _rain(self):
+        self.logger.debug('Creating a rain weather')
+        return RainProcess(gpio=11, sleep=1)
+
+    def _mist(self):
+        self.logger.debug('Creating a mist weather')
+        return MistProcess(gpio=12, sleep=1)
+
+    def _wind(self):
+        self.logger.debug('Creating a wind weather')
+        return WindProcess(gpio=13, sleep=1)
 
     def _demo(self):
         self.logger.debug("Creating a demo weather for Hell's Kitchen")
@@ -45,12 +63,27 @@ class BoxProcess(Process):
         if self.thunderstorm:
             self.thunderstorm.terminate()
             self.thunderstorm = None
+
         if self.sunny:
             self.sunny.terminate()
             self.sunny = None
+
+        if self.rain:
+            self.rain.terminate()
+            self.rain = None
+
+        if self.mist:
+            self.mist.terminate()
+            self.mist = None
+
+        if self.wind:
+            self.wind.terminate()
+            self.wind = None
+
         if self.demo:
             self.demo.terminate()
             self.demo = None
+
         if self.weather:
             self.weather.terminate()
             self.weather = None
@@ -85,6 +118,24 @@ class BoxProcess(Process):
                 self._terminate_processes()
                 self.sunny = self._sunny()
                 self.sunny.start()
+
+            if command == 'rain':
+                self.logger.debug('Received command: {}'.format(command))
+                self._terminate_processes()
+                self.rain = self._rain()
+                self.rain.start()
+
+            if command == 'mist':
+                self.logger.debug('Received command: {}'.format(command))
+                self._terminate_processes()
+                self.mist = self._mist()
+                self.mist.start()
+
+            if command == 'wind':
+                self.logger.debug('Received command: {}'.format(command))
+                self._terminate_processes()
+                self.wind = self._mist()
+                self.wind.start()
 
             if command == 'demo':
                 self.logger.debug('Received command: {}'.format(command))
