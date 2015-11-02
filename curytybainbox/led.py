@@ -18,9 +18,9 @@ class RGBLEDProcess(Process):
         self.blue = blue
         self.sleep = sleep
         self.strobe = strobe
-        self.blue_gpio = 0
-        self.green_gpio = 1
-        self.red_gpio = 2
+        self.blue_gpio = 3
+        self.green_gpio = 5
+        self.red_gpio = 6
 
     def _led_on(self):
         self.logger.debug('LED on')
