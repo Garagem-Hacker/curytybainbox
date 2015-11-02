@@ -1,6 +1,7 @@
 import os
 import time
 import socket
+from Queue import Queue
 
 import multiprocessing
 from multiprocessing import Process, Event
@@ -21,13 +22,13 @@ class BoxProcess(Process):
         self.name = name
         self.sleep = sleep
         self.unix_path = unix_path
-        self.thunderstorm = None
-        self.sunny = None
+        self.rgb_led = None
         self.rain = None
         self.mist = None
         self.wind = None
         self.demo = None
         self.weather = None
+        self.led_queue = Queue()
 
         if os.path.exists(self.unix_path):
             os.remove(self.unix_path)
@@ -35,16 +36,6 @@ class BoxProcess(Process):
         self.server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
         self.server.bind(self.unix_path)
         self.server.settimeout(1)
-
-    def _thunderstorm(self):
-        self.logger.debug('Creating a thunderstorm weather')
-        return RGBLEDProcess(red=200, green=200, blue=255, strobe=True,
-                             sleep=0.5, name='ThunderstormProcess')
-
-    def _sunny(self):
-        self.logger.debug('Creating a sunny weather')
-        return RGBLEDProcess(red=255, green=255, blue=0, strobe=False, sleep=1,
-                             name='SunnyProcess')
 
     def _rain(self):
         self.logger.debug('Creating a rain weather')
@@ -69,17 +60,9 @@ class BoxProcess(Process):
 
     def _terminate_processes(self):
         self.logger.debug('Trying terminate processes')
-        if self.thunderstorm:
-            self.thunderstorm.stop()
-            self.thunderstorm.terminate()
-            del self.thunderstorm
-            self.thunderstorm = None
 
-        if self.sunny:
-            self.sunny.stop()
-            self.sunny.terminate()
-            del self.sunny
-            self.sunny = None
+        if self.rgb_led:
+            self.rgb_led.stop()
 
         if self.rain:
             self.rain.stop()
@@ -110,6 +93,10 @@ class BoxProcess(Process):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
+        self.logger.debug('Creating a RGB LED process')
+        self.rgb_led = RGBLEDProcess(self.led_queue)
+        self.rgb_led.start()
+
         while self.event.is_set():
 
             try:
@@ -121,14 +108,14 @@ class BoxProcess(Process):
             if command == 'thunderstorm':
                 self.logger.debug('Received command: {}'.format(command))
                 self._terminate_processes()
-                self.thunderstorm = self._thunderstorm()
-                self.thunderstorm.start()
+                self.logger.debug('Starting thunderstorm weather')
+                self.led_queue.put({'red': 200, 'green': 200, 'blue': 255, 'strobe': True, 'sleep': 0.5})
 
             if command == 'sunny':
                 self.logger.debug('Received command: {}'.format(command))
                 self._terminate_processes()
-                self.sunny = self._sunny()
-                self.sunny.start()
+                self.logger.debug('Staring a sunny weather')
+                self.led_queue.put({'red': 255, 'green': 255, 'blue': 0, 'strobe': False, 'sleep': 1})
 
             if command == 'rain':
                 self.logger.debug('Received command: {}'.format(command))

@@ -10,30 +10,14 @@ DUTYCYCLE = 0.003921569
 
 class RGBLEDProcess(Process):
 
-    def __init__(self, red, green, blue, strobe, sleep=0.5, name='RGBLEDProcess'):
+    def __init__(self, queue, sleep=1, name='RGBLEDProcess'):
         Process.__init__(self, name=name)
         self.logger = multiprocessing.get_logger()
         self.event = Event()
         self.name = name
-
-        # TODO: Fix this ugly workaround
-        if red == 255:
-            self.red = 1
-        else:
-            self.red = float(red * DUTYCYCLE)
-
-        if green == 255:
-            self.green = 1
-        else:
-            self.green = float(green * DUTYCYCLE)
-
-        if blue == 255:
-            self.blue = 1
-        else:
-            self.blue = float(blue * DUTYCYCLE)
-
+        self.queue = queue
         self.sleep = sleep
-        self.strobe = strobe
+        self.strobe = False
         self.blue_gpio = 3
         self.green_gpio = 5
         self.red_gpio = 6
@@ -72,6 +56,31 @@ class RGBLEDProcess(Process):
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
         while self.event.is_set():
+
+            data = self.queue.get()
+            if data:
+                red = data['red']
+                green = data['green']
+                blue = data['blue']
+                self.sleep = data['sleep']
+                self.strobe = data['False']
+
+                # TODO: Fix this ugly workaround
+                if red == 255:
+                    self.red = 1
+                else:
+                    self.red = float(red * DUTYCYCLE)
+
+                if green == 255:
+                    self.green = 1
+                else:
+                    self.green = float(green * DUTYCYCLE)
+
+                if blue == 255:
+                    self.blue = 1
+                else:
+                    self.blue = float(blue * DUTYCYCLE)
+
             self._led_on()
             time.sleep(self.sleep)
             if self.strobe:
