@@ -113,6 +113,8 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=tests_require,
+    include_package_data=True,
+    zip_safe=False,
     extras_require={
         'dev': dev_requires,
         'test': tests_require,
