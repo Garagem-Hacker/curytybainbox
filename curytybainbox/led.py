@@ -39,6 +39,8 @@ class RGBLEDProcess(Process):
         self.green_pwm.enable(True)
         self.blue_pwm.enable(True)
 
+        self.color_set = False
+
     def _led_on(self):
         self.logger.debug('LED on')
         self.logger.debug('RED {}'.format(self.red))
@@ -98,10 +100,16 @@ class RGBLEDProcess(Process):
 
                 self.logger.debug('BLUE {}'.format(self.blue))
 
+                self.red_pwm.enable(True)
+                self.green_pwm.enable(True)
+                self.blue_pwm.enable(True)
+
+                self.color_set = True
+
             except Empty:
                 self.logger.debug('No configuration received')
 
-            if self.red:
+            if self.color_set:
                 self._led_on()
                 time.sleep(self.sleep)
                 if self.strobe:
@@ -111,6 +119,6 @@ class RGBLEDProcess(Process):
     def stop(self):
         self.logger.debug('Process {} will turn off LED.'.format(self.name))
         self._led_off()
-        #self.red_pwm.enable(False)
-        #self.green_pwm.enable(False)
-        #self.blue_pwm.enable(False)
+        self.red_pwm.enable(False)
+        self.green_pwm.enable(False)
+        self.blue_pwm.enable(False)
