@@ -23,3 +23,10 @@ release: clean
 	python setup.py sdist
 	python setup.py bdist_wheel
 	twine upload dist/*
+
+deploy:
+	systemctl stop curytybainboxweb
+	systemctl stop curytybainboxd
+	python setup.py install
+	systemctl start curytybainboxd
+	systemctl start curytybainboxweb
