@@ -1,7 +1,7 @@
 import time
-
 import multiprocessing
 from multiprocessing import Process, Event
+from Queue import Empty
 
 import mraa
 
@@ -58,9 +58,10 @@ class RGBLEDProcess(Process):
         while self.event.is_set():
             self.logger.debug('Looping')
 
-            data = self.queue.get()
-            self.logger.debug('Received configuration: {}'.format(data))
-            if data:
+            try:
+                data = self.queue.get(timeout=1)
+                self.logger.debug('Received configuration: {}'.format(data))
+
                 red = data['red']
                 green = data['green']
                 blue = data['blue']
@@ -88,6 +89,9 @@ class RGBLEDProcess(Process):
                 if self.strobe:
                     self._led_off()
                     time.sleep(self.sleep)
+
+            except Empty:
+                self.logger.debug('No configuration received')
 
             time.sleep(1)
 

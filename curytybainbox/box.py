@@ -1,10 +1,9 @@
 import os
 import time
 import socket
-from Queue import Queue
-
 import multiprocessing
 from multiprocessing import Process, Event
+from Queue import Queue, Full
 
 from .led import RGBLEDProcess
 from .weather import WeatherProcess
@@ -110,13 +109,19 @@ class BoxProcess(Process):
                 self.logger.debug('Received command: {}'.format(command))
                 self._terminate_processes()
                 self.logger.debug('Starting thunderstorm weather')
-                self.led_queue.put({'red': 200, 'green': 200, 'blue': 255, 'strobe': True, 'sleep': 0.5})
+                try:
+                    self.led_queue.put({'red': 200, 'green': 200, 'blue': 255, 'strobe': True, 'sleep': 0.5}, False)
+                except Full:
+                    self.logger.debug('LED queue is full')
 
             if command == 'sunny':
                 self.logger.debug('Received command: {}'.format(command))
                 self._terminate_processes()
                 self.logger.debug('Staring a sunny weather')
-                self.led_queue.put({'red': 255, 'green': 255, 'blue': 0, 'strobe': False, 'sleep': 1})
+                try:
+                    self.led_queue.put({'red': 255, 'green': 255, 'blue': 0, 'strobe': False, 'sleep': 1}, False)
+                except Full:
+                    self.logger.debug('LED queue is full')
 
             if command == 'rain':
                 self.logger.debug('Received command: {}'.format(command))
