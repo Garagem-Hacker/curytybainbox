@@ -5,6 +5,8 @@ from multiprocessing import Process, Event
 
 import mraa
 
+DUTYCYCLE = 0.003921569
+
 
 class RGBLEDProcess(Process):
 
@@ -13,9 +15,9 @@ class RGBLEDProcess(Process):
         self.logger = multiprocessing.get_logger()
         self.event = Event()
         self.name = name
-        self.red = red
-        self.green = green
-        self.blue = blue
+        self.red = red * DUTYCYCLE
+        self.green = green * DUTYCYCLE
+        self.blue = blue * DUTYCYCLE
         self.sleep = sleep
         self.strobe = strobe
         self.blue_gpio = 3
