@@ -21,6 +21,9 @@ class RGBLEDProcess(Process):
         self.blue_gpio = 3
         self.green_gpio = 5
         self.red_gpio = 6
+        self.red_pwm = None
+        self.green_pwm = None
+        self.blue_pwm = None
 
     def _led_on(self):
         self.logger.debug('LED on')
