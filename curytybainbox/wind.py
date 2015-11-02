@@ -14,8 +14,9 @@ class WindProcess(Process):
         self.event = Event()
         self.name = name
         self.gpio = gpio
-        self.fan = None
         self.sleep = sleep
+        self.fan = mraa.Gpio(self.gpio)
+        self.fan.dir(mraa.DIR_OUT)
 
     def _wind_on(self):
         self.logger.debug('LED on')
@@ -30,8 +31,6 @@ class WindProcess(Process):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
-        self.fan = mraa.Gpio(self.gpio)
-        self.fan.dir(mraa.DIR_OUT)
 
         while self.event.is_set():
             self._wind_on()
