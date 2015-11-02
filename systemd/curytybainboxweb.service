@@ -1,0 +1,12 @@
+[Unit]
+Description=curytybainboxweb
+Requires=curytybainboxd.service
+After=curytybainboxd.service
+
+[Service]
+EnvironmentFile=/etc/env.d/curytybainbox
+Restart=always
+ExecStart=/usr/bin/curytybainboxweb
+
+[Install]
+WantedBy=multi-user.target

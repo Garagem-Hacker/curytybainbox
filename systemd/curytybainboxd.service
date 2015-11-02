@@ -1,0 +1,11 @@
+[Unit]
+Description=curytybainboxd
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/env.d/curytybainbox
+Restart=always
+ExecStart=/usr/bin/curytybainboxd
+
+[Install]
+WantedBy=multi-user.target

@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import glob
 import codecs
 
 from setuptools import setup, find_packages, Command
@@ -116,6 +117,9 @@ setup(
         'dev': dev_requires,
         'test': tests_require,
     },
+    data_files=[
+        ('/lib/systemd/system/', glob.glob('systemd/*.service')),
+    ],
     cmdclass={
         "version": VersionCommand,
         'test': PyTest,
