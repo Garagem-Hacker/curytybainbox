@@ -102,8 +102,6 @@ class RGBLEDProcess(Process):
                     self._led_off()
                     time.sleep(self.sleep)
 
-            time.sleep(1)
-
     def stop(self):
         self.logger.debug('Process {} will turn off LED.'.format(self.name))
         self._led_off()
