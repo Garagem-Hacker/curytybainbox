@@ -23,9 +23,9 @@ class RGBLEDProcess(Process):
         self.green = None
         self.red = None
 
-        self.blue_gpio = 3
-        self.green_gpio = 6
-        self.red_gpio = 5
+        self.blue_gpio = 6
+        self.green_gpio = 3
+        self.red_gpio = 9
 
         self.red_pwm = mraa.Pwm(self.red_gpio, owner=False)
         self.green_pwm = mraa.Pwm(self.green_gpio, owner=False)
