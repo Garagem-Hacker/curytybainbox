@@ -23,7 +23,8 @@ class RainProcess(Process):
 
     def _rain_off(self):
         self.logger.debug('LED off')
-        self.pump.write(0)
+        if self.pump:
+            self.pump.write(0)
 
     def run(self):
         self.event.set()

@@ -39,9 +39,14 @@ class RGBLEDProcess(Process):
 
     def _led_off(self):
         self.logger.debug('LED off')
-        self.red_pwm.write(0)
-        self.green_pwm.write(0)
-        self.blue_pwm.write(0)
+        if self.red_pwm:
+            self.red_pwm.write(0)
+
+        if self.green_pwm:
+            self.green_pwm.write(0)
+
+        if self.blue_pwm:
+            self.blue_pwm.write(0)
 
     def run(self):
         self.event.set()

@@ -24,7 +24,8 @@ class MistProcess(Process):
 
     def _mist_off(self):
         self.logger.debug('Mist off')
-        self.mist.write(0)
+        if self.mist:
+            self.mist.write(0)
 
     def run(self):
         self.event.set()

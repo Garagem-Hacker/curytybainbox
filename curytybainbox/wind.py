@@ -23,7 +23,8 @@ class WindProcess(Process):
 
     def _wind_off(self):
         self.logger.debug('LED off')
-        self.fan.write(0)
+        if self.fan:
+            self.fan.write(0)
 
     def run(self):
         self.event.set()
