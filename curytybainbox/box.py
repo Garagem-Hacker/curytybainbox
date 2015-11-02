@@ -2,8 +2,8 @@ import os
 import time
 import socket
 import multiprocessing
-from multiprocessing import Process, Event
-from Queue import Queue, Full
+from multiprocessing import Process, Event, Queue
+from Queue import Full
 
 from .led import RGBLEDProcess
 from .weather import WeatherProcess
