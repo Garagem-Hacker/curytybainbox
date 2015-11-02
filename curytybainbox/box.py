@@ -28,6 +28,10 @@ class BoxProcess(Process):
         self.wind = None
         self.demo = None
         self.weather = None
+
+        if os.path.exists(self.unix_path):
+            os.remove(self.unix_path)
+
         self.server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
         self.server.bind(self.unix_path)
         self.server.settimeout(1)
@@ -102,9 +106,6 @@ class BoxProcess(Process):
     def run(self):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
-
-        if os.path.exists(self.unix_path):
-            os.remove(self.unix_path)
 
         while self.event.is_set():
 
