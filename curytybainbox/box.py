@@ -55,7 +55,7 @@ class BoxProcess(Process):
 
     def _wind(self):
         self.logger.debug('Creating a wind weather')
-        return WindProcess(gpio=13, sleep=1)
+        return WindProcess(gpio=10, sleep=1)
 
     def _demo(self):
         self.logger.debug("Creating a demo weather for Hell's Kitchen")
