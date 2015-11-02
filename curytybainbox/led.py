@@ -56,6 +56,7 @@ class RGBLEDProcess(Process):
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
         while self.event.is_set():
+            self.logger.debug('Looping')
 
             data = self.queue.get()
             self.logger.debug('Received configuration: {}'.format(data))

@@ -28,7 +28,7 @@ class BoxProcess(Process):
         self.wind = None
         self.demo = None
         self.weather = None
-        self.led_queue = Queue()
+        self.led_queue = None
 
         if os.path.exists(self.unix_path):
             os.remove(self.unix_path)
@@ -93,6 +93,7 @@ class BoxProcess(Process):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
+        self.led_queue = Queue()
         self.logger.debug('Creating a RGB LED process')
         self.rgb_led = RGBLEDProcess(self.led_queue)
         self.rgb_led.start()
