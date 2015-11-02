@@ -43,7 +43,8 @@ class BoxProcess(Process):
 
     def _sunny(self):
         self.logger.debug('Creating a sunny weather')
-        return RGBLEDProcess(red=255, green=255, blue=0, strobe=False, sleep=1)
+        return RGBLEDProcess(red=255, green=255, blue=0, strobe=False, sleep=1,
+                             name='SunnyProcess')
 
     def _rain(self):
         self.logger.debug('Creating a rain weather')
@@ -71,11 +72,13 @@ class BoxProcess(Process):
         if self.thunderstorm:
             self.thunderstorm.stop()
             self.thunderstorm.terminate()
+            del self.thunderstorm
             self.thunderstorm = None
 
         if self.sunny:
             self.sunny.stop()
             self.sunny.terminate()
+            del self.sunny
             self.sunny = None
 
         if self.rain:
