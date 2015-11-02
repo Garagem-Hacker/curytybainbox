@@ -66,7 +66,7 @@ class RGBLEDProcess(Process):
                 green = data['green']
                 blue = data['blue']
                 self.sleep = data['sleep']
-                self.strobe = data['False']
+                self.strobe = data['strobe']
 
                 # TODO: Fix this ugly workaround
                 if red == 255:
