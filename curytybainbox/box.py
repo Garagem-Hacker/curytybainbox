@@ -59,7 +59,7 @@ class BoxProcess(Process):
         return WeatherProcess(city)
 
     def _terminate_processes(self):
-        self.logger.debug('Trying stop processes')
+        self.logger.debug('Trying terminate processes')
         if self.thunderstorm:
             self.thunderstorm.terminate()
             self.thunderstorm = None
@@ -134,7 +134,7 @@ class BoxProcess(Process):
             if command == 'wind':
                 self.logger.debug('Received command: {}'.format(command))
                 self._terminate_processes()
-                self.wind = self._mist()
+                self.wind = self._wind()
                 self.wind.start()
 
             if command == 'demo':

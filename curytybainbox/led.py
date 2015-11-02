@@ -37,9 +37,9 @@ class RGBLEDProcess(Process):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
-        self.red_pwm = mraa.Pwm(self.red_pgio)
-        self.green_pwm = mraa.Pwm(self.green_pgio)
-        self.blue_pwm = mraa.Pwm(self.blue_pgio)
+        self.red_pwm = mraa.Pwm(self.red_gpio)
+        self.green_pwm = mraa.Pwm(self.green_gpio)
+        self.blue_pwm = mraa.Pwm(self.blue_gpio)
         self.red_pwm.period_us(700)
         self.green_pwm.period_us(700)
         self.blue_pwm.period_us(700)
