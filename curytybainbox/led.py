@@ -82,20 +82,26 @@ class RGBLEDProcess(Process):
                 else:
                     self.red = float(red * DUTYCYCLE)
 
+                self.logger.debug('RED {}'.format(self.red))
+
                 if green == 255:
                     self.green = 1
                 else:
                     self.green = float(green * DUTYCYCLE)
+
+                self.logger.debug('GREEN {}'.format(self.green))
 
                 if blue == 255:
                     self.blue = 1
                 else:
                     self.blue = float(blue * DUTYCYCLE)
 
+                self.logger.debug('BLUE {}'.format(self.blue))
+
             except Empty:
                 self.logger.debug('No configuration received')
 
-            if self.red and self.green and self.blue:
+            if self.red:
                 self._led_on()
                 time.sleep(self.sleep)
                 if self.strobe:
