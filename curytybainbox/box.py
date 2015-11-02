@@ -28,6 +28,9 @@ class BoxProcess(Process):
         self.wind = None
         self.demo = None
         self.weather = None
+        self.server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        self.server.bind(self.unix_path)
+        self.server.settimeout(1)
 
     def _thunderstorm(self):
         self.logger.debug('Creating a thunderstorm weather')
@@ -102,10 +105,6 @@ class BoxProcess(Process):
 
         if os.path.exists(self.unix_path):
             os.remove(self.unix_path)
-
-        self.server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-        self.server.bind(self.unix_path)
-        self.server.settimeout(1)
 
         while self.event.is_set():
 

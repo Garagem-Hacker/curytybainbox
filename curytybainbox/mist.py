@@ -14,8 +14,9 @@ class MistProcess(Process):
         self.event = Event()
         self.name = name
         self.gpio = gpio
-        self.mist = None
         self.sleep = sleep
+        self.mist = mraa.Gpio(self.gpio)
+        self.mist.dir(mraa.DIR_OUT)
 
     def _mist_on(self):
         self.logger.debug('Mist on')
@@ -28,9 +29,6 @@ class MistProcess(Process):
     def run(self):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
-
-        self.mist = mraa.Gpio(self.gpio)
-        self.mist.dir(mraa.DIR_OUT)
 
         while self.event.is_set():
             self._mist_on()

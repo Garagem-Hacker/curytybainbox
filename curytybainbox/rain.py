@@ -13,8 +13,9 @@ class RainProcess(Process):
         self.logger = multiprocessing.get_logger()
         self.event = Event()
         self.gpio = gpio
-        self.pump = None
         self.sleep = sleep
+        self.pump = mraa.Gpio(self.gpio)
+        self.pump.dir(mraa.DIR_OUT)
 
     def _rain_on(self):
         self.logger.debug('LED on')
@@ -27,9 +28,6 @@ class RainProcess(Process):
     def run(self):
         self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
-
-        self.pump = mraa.Gpio(self.gpio)
-        self.pump.dir(mraa.DIR_OUT)
 
         while self.event.is_set():
             self._rain_on()
