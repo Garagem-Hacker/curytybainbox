@@ -58,6 +58,7 @@ class RGBLEDProcess(Process):
         while self.event.is_set():
 
             data = self.queue.get()
+            self.logger.debug('Received configuration: {}'.format(data))
             if data:
                 red = data['red']
                 green = data['green']
@@ -81,11 +82,13 @@ class RGBLEDProcess(Process):
                 else:
                     self.blue = float(blue * DUTYCYCLE)
 
-            self._led_on()
-            time.sleep(self.sleep)
-            if self.strobe:
-                self._led_off()
+                self._led_on()
                 time.sleep(self.sleep)
+                if self.strobe:
+                    self._led_off()
+                    time.sleep(self.sleep)
+
+            time.sleep(1)
 
     def stop(self):
         self.logger.debug('Process {} will halt.'.format(self.name))
