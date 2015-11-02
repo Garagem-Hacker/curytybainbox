@@ -91,9 +91,8 @@ class RGBLEDProcess(Process):
             time.sleep(1)
 
     def stop(self):
-        self.logger.debug('Process {} will halt.'.format(self.name))
-        self.event.clear()
+        self.logger.debug('Process {} will turn off LED.'.format(self.name))
         self._led_off()
-        self.red_pwm.enable(False)
-        self.green_pwm.enable(False)
-        self.blue_pwm.enable(False)
+        #self.red_pwm.enable(False)
+        #self.green_pwm.enable(False)
+        #self.blue_pwm.enable(False)
