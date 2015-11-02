@@ -18,15 +18,23 @@ class RGBLEDProcess(Process):
         self.queue = queue
         self.sleep = sleep
         self.strobe = False
+
+        self.blue = None
+        self.green = None
+        self.red = None
+
         self.blue_gpio = 3
         self.green_gpio = 5
         self.red_gpio = 6
+
         self.red_pwm = mraa.Pwm(self.red_gpio, owner=False)
         self.green_pwm = mraa.Pwm(self.green_gpio, owner=False)
         self.blue_pwm = mraa.Pwm(self.blue_gpio, owner=False)
+
         self.red_pwm.period_us(700)
         self.green_pwm.period_us(700)
         self.blue_pwm.period_us(700)
+
         self.red_pwm.enable(True)
         self.green_pwm.enable(True)
         self.blue_pwm.enable(True)
@@ -84,14 +92,15 @@ class RGBLEDProcess(Process):
                 else:
                     self.blue = float(blue * DUTYCYCLE)
 
+            except Empty:
+                self.logger.debug('No configuration received')
+
+            if self.red and self.green and self.blue:
                 self._led_on()
                 time.sleep(self.sleep)
                 if self.strobe:
                     self._led_off()
                     time.sleep(self.sleep)
-
-            except Empty:
-                self.logger.debug('No configuration received')
 
             time.sleep(1)
 
