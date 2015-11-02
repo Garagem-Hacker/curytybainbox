@@ -29,6 +29,7 @@ def main():
         pass
     finally:
         b.stop()
+        b.terminate()
 
     sys.exit(0)
 

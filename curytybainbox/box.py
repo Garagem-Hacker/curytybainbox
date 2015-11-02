@@ -18,6 +18,7 @@ class BoxProcess(Process):
         Process.__init__(self, name=name)
         self.logger = multiprocessing.get_logger()
         self.event = Event()
+        self.name = name
         self.sleep = sleep
         self.unix_path = unix_path
         self.thunderstorm = None
@@ -61,30 +62,37 @@ class BoxProcess(Process):
     def _terminate_processes(self):
         self.logger.debug('Trying terminate processes')
         if self.thunderstorm:
+            self.thunderstorm.stop()
             self.thunderstorm.terminate()
             self.thunderstorm = None
 
         if self.sunny:
+            self.sunny.stop()
             self.sunny.terminate()
             self.sunny = None
 
         if self.rain:
+            self.rain.stop()
             self.rain.terminate()
             self.rain = None
 
         if self.mist:
+            self.mist.stop()
             self.mist.terminate()
             self.mist = None
 
         if self.wind:
+            self.wind.stop()
             self.wind.terminate()
             self.wind = None
 
         if self.demo:
+            self.demo.stop()
             self.demo.terminate()
             self.demo = None
 
         if self.weather:
+            self.weather.stop()
             self.weather.terminate()
             self.weather = None
 
@@ -157,9 +165,8 @@ class BoxProcess(Process):
             time.sleep(1)
 
     def stop(self):
-        self.logger.debug('Process will halt.')
+        self.logger.debug('Process {} will halt.'.format(self.name))
         self.event.clear()
         self.server.close()
         self._terminate_processes()
         os.remove(self.unix_path)
-        self.terminate()

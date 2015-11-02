@@ -10,6 +10,7 @@ class WeatherProcess(Process):
         Process.__init__(self, name=name)
         self.logger = multiprocessing.get_logger()
         self.event = Event()
+        self.name = name
         self.city = city
 
     def run(self):
@@ -19,6 +20,5 @@ class WeatherProcess(Process):
             time.sleep(1)
 
     def stop(self):
-        self.logger.debug('Process will halt.')
+        self.logger.debug('Process {} will halt.'.format(self.name))
         self.event.clear()
-        self.terminate()

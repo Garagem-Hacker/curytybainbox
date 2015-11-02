@@ -12,6 +12,7 @@ class RGBLEDProcess(Process):
         Process.__init__(self, name=name)
         self.logger = multiprocessing.get_logger()
         self.event = Event()
+        self.name = name
         self.red = red
         self.green = green
         self.blue = blue
@@ -55,7 +56,6 @@ class RGBLEDProcess(Process):
                 time.sleep(self.sleep)
 
     def stop(self):
-        self.logger.debug('Process will halt.')
+        self.logger.debug('Process {} will halt.'.format(self.name))
         self.event.clear()
         self._led_off()
-        self.terminate()

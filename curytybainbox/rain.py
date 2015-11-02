@@ -36,7 +36,6 @@ class RainProcess(Process):
             time.sleep(self.sleep)
 
     def stop(self):
-        self._rain_off()
-        self.logger.debug('Process will halt.')
+        self.logger.debug('Process {} will halt.'.format(self.name))
         self.event.clear()
-        self.terminate()
+        self._rain_off()

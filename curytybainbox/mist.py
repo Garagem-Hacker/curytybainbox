@@ -12,6 +12,7 @@ class MistProcess(Process):
         Process.__init__(self, name=name)
         self.logger = multiprocessing.get_logger()
         self.event = Event()
+        self.name = name
         self.gpio = gpio
         self.mist = None
         self.sleep = sleep
@@ -36,7 +37,6 @@ class MistProcess(Process):
             time.sleep(self.sleep)
 
     def stop(self):
-        self._mist_off()
-        self.logger.debug('Process will halt.')
+        self.logger.debug('Process {} will halt.'.format(self.name))
         self.event.clear()
-        self.terminate()
+        self._mist_off()
