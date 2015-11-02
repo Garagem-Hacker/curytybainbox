@@ -119,6 +119,7 @@ setup(
     },
     data_files=[
         ('/lib/systemd/system/', glob.glob('systemd/*.service')),
+        ('/etc/curytybainbox/', glob.glob('environment')),
     ],
     cmdclass={
         "version": VersionCommand,
