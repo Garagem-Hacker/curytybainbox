@@ -107,7 +107,6 @@ class BoxProcess(Process):
 
             if command == 'thunderstorm':
                 self.logger.debug('Received command: {}'.format(command))
-                self._terminate_processes()
                 self.logger.debug('Starting thunderstorm weather')
                 try:
                     self.led_queue.put({'red': 200, 'green': 200, 'blue': 255, 'strobe': True, 'sleep': 0.3}, False)
@@ -116,7 +115,6 @@ class BoxProcess(Process):
 
             if command == 'sunny':
                 self.logger.debug('Received command: {}'.format(command))
-                self._terminate_processes()
                 self.logger.debug('Staring a sunny weather')
                 try:
                     self.led_queue.put({'red': 255, 'green': 100, 'blue': 0, 'strobe': False, 'sleep': 1}, False)
@@ -125,19 +123,16 @@ class BoxProcess(Process):
 
             if command == 'rain':
                 self.logger.debug('Received command: {}'.format(command))
-                self._terminate_processes()
                 self.rain = self._rain()
                 self.rain.start()
 
             if command == 'mist':
                 self.logger.debug('Received command: {}'.format(command))
-                self._terminate_processes()
                 self.mist = self._mist()
                 self.mist.start()
 
             if command == 'wind':
                 self.logger.debug('Received command: {}'.format(command))
-                self._terminate_processes()
                 self.wind = self._wind()
                 self.wind.start()
 
