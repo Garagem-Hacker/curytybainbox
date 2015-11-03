@@ -119,7 +119,7 @@ class BoxProcess(Process):
                 self._terminate_processes()
                 self.logger.debug('Staring a sunny weather')
                 try:
-                    self.led_queue.put({'red': 0, 'green': 255, 'blue': 0, 'strobe': False, 'sleep': 1}, False)
+                    self.led_queue.put({'red': 255, 'green': 100, 'blue': 0, 'strobe': False, 'sleep': 1}, False)
                 except Full:
                     self.logger.debug('LED queue is full')
 

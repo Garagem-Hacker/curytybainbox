@@ -118,6 +118,7 @@ class RGBLEDProcess(Process):
 
     def stop(self):
         self.logger.debug('Process {} will turn off LED.'.format(self.name))
+        self.event.clear()
         self._led_off()
         self.red_pwm.enable(False)
         self.green_pwm.enable(False)
