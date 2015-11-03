@@ -27,27 +27,19 @@ class RGBLEDProcess(Process):
         self.green_gpio = 3
         self.red_gpio = 9
 
-        self.red_pwm = mraa.Pwm(self.red_gpio, owner=False)
-        self.green_pwm = mraa.Pwm(self.green_gpio, owner=False)
-        self.blue_pwm = mraa.Pwm(self.blue_gpio, owner=False)
+        self.red_pwm = mraa.Pwm(self.red_gpio)
+        self.green_pwm = mraa.Pwm(self.green_gpio)
+        self.blue_pwm = mraa.Pwm(self.blue_gpio)
 
         self.red_pwm.period_us(700)
         self.green_pwm.period_us(700)
         self.blue_pwm.period_us(700)
 
-        self.red_pwm.enable(True)
-        self.green_pwm.enable(True)
-        self.blue_pwm.enable(True)
-
-        self.color_set = False
-
     def _led_on(self):
         self.logger.debug('LED on')
-        self.logger.debug('RED {}'.format(self.red))
+
         self.red_pwm.write(self.red)
-        self.logger.debug('GREEN {}'.format(self.green))
         self.green_pwm.write(self.green)
-        self.logger.debug('BLUE {}'.format(self.blue))
         self.blue_pwm.write(self.blue)
 
     def _led_off(self):
@@ -61,11 +53,18 @@ class RGBLEDProcess(Process):
         if self.blue_pwm:
             self.blue_pwm.write(0)
 
+        if not self.event.is_set():
+            self.red_pwm.write(0)
+            self.green_pwm.write(0)
+            self.blue_pwm.write(0)
+            self.red_pwm.enable(False)
+            self.green_pwm.enable(False)
+            self.blue_pwm.enable(False)
+
     def run(self):
-        self.event.set()
         self.logger.debug('PID: %d' % multiprocessing.current_process().pid)
 
-        while self.event.is_set():
+        while True:
             self.logger.debug('Looping')
 
             try:
@@ -100,16 +99,16 @@ class RGBLEDProcess(Process):
 
                 self.logger.debug('BLUE {}'.format(self.blue))
 
+                self.event.set()
+
                 self.red_pwm.enable(True)
                 self.green_pwm.enable(True)
                 self.blue_pwm.enable(True)
 
-                self.color_set = True
-
             except Empty:
                 self.logger.debug('No configuration received')
 
-            if self.color_set:
+            if self.event.is_set():
                 self._led_on()
                 time.sleep(self.sleep)
                 if self.strobe:
@@ -118,8 +117,9 @@ class RGBLEDProcess(Process):
 
     def stop(self):
         self.logger.debug('Process {} will turn off LED.'.format(self.name))
-        self.color_set = False
+        self.event.clear()
         self._led_off()
         self.red_pwm.enable(False)
         self.green_pwm.enable(False)
         self.blue_pwm.enable(False)
+        self._led_off()

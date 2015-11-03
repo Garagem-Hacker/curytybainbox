@@ -60,8 +60,7 @@ class BoxProcess(Process):
     def _terminate_processes(self):
         self.logger.debug('Trying terminate processes')
 
-        if self.rgb_led:
-            self.rgb_led.stop()
+        self.rgb_led.stop()
 
         if self.rain:
             self.rain.stop()

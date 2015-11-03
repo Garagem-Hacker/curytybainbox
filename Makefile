@@ -30,3 +30,12 @@ deploy:
 	python setup.py install
 	systemctl start curytybainboxd
 	systemctl start curytybainboxweb
+
+stop:
+	systemctl stop curytybainboxweb
+	systemctl stop curytybainboxd
+	python shutdown.py
+
+start:
+	systemctl start curytybainboxd
+	systemctl start curytybainboxweb
